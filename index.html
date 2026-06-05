@@ -431,12 +431,12 @@
         <div class="c-row"><span class="lbl">The eLabs</span><span class="val">theelabs.tech</span></div>
         <div class="c-row"><span class="lbl">MarketSense</span><span class="val">marketsense.tech</span></div>
       </div>
-      <form class="reveal" action="https://eo6rrb84dpp24xp.m.pipedream.net" method="POST">
-        <div class="fg"><label>Nombre</label><input type="text" name="nombre" placeholder="Tu nombre completo" required></div>
+      <div class="reveal">
+        <div class="fg"><label>Nombre</label><input type="text" id="f-nombre" placeholder="Tu nombre completo"></div>
         <div class="f-row">
-          <div class="fg"><label>Email</label><input type="email" name="email" placeholder="tu@email.com" required></div>
+          <div class="fg"><label>Email</label><input type="email" id="f-email" placeholder="tu@email.com"></div>
           <div class="fg"><label>Motivo</label>
-            <select name="motivo">
+            <select id="f-motivo">
               <option value="">Seleccioná...</option>
               <option>Quiero ser invitado/a</option>
               <option>Colaboración</option>
@@ -445,9 +445,10 @@
             </select>
           </div>
         </div>
-        <div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Contanos de qué se trata..." required></textarea></div>
-        <button type="submit" class="submit">Enviar mensaje</button>
-      </form>
+        <div class="fg"><label>Mensaje</label><textarea id="f-mensaje" placeholder="Contanos de qué se trata..."></textarea></div>
+        <button type="button" class="submit" id="form-btn" onclick="enviarForm()">Enviar mensaje</button>
+        <div id="form-status" style="display:none; margin-top:1rem; padding:1rem; font-size:0.78rem; letter-spacing:0.1em; text-align:center; text-transform:uppercase;"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -506,6 +507,63 @@
     });
   }, { threshold: 0.07 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script>
+  async function enviarForm() {
+    const nombre  = document.getElementById('f-nombre').value.trim();
+    const email   = document.getElementById('f-email').value.trim();
+    const motivo  = document.getElementById('f-motivo').value;
+    const mensaje = document.getElementById('f-mensaje').value.trim();
+    const btn     = document.getElementById('form-btn');
+    const status  = document.getElementById('form-status');
+
+    if (!nombre || !email || !mensaje) {
+      status.style.display = 'block';
+      status.style.color = '#ff6b6b';
+      status.textContent = 'Completá nombre, email y mensaje.';
+      return;
+    }
+
+    const WEBHOOK = 'https://eo6rrb84dpp24xp.m.pipedream.net';
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    btn.style.opacity = '0.7';
+    status.style.display = 'none';
+
+    try {
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, motivo, mensaje })
+      });
+
+      btn.textContent = '✓ Mensaje enviado';
+      btn.style.opacity = '1';
+      btn.style.background = 'linear-gradient(135deg,#5b21b6,#7c3aed)';
+      status.style.display = 'block';
+      status.style.color = '#9d5cff';
+      status.textContent = '¡Gracias! Nos ponemos en contacto pronto.';
+
+      ['f-nombre','f-email','f-mensaje'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('f-motivo').selectedIndex = 0;
+
+      setTimeout(() => {
+        btn.textContent = 'Enviar mensaje';
+        btn.style.background = '';
+        btn.disabled = false;
+        status.style.display = 'none';
+      }, 5000);
+
+    } catch(err) {
+      btn.textContent = 'Enviar mensaje';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      status.style.display = 'block';
+      status.style.color = '#ff6b6b';
+      status.textContent = 'Hubo un error. Escribinos a hola@hackthefuturepodcast.com';
+    }
+  }
 </script>
 </body>
 </html>
