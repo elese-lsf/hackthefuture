@@ -20,7 +20,7 @@ const EPISODES = [
     description: "Desde herramientas que “alucinan” o generan outputs incorrectos, hasta una necesidad cada vez más fuerte de líderes técnicos que realmente entiendan lo que están viendo y puedan cuestionarlo."
   },
   {
-    id: "HfjHRKJFzis",           // ID de YouTube (lo que va después de ?v=)
+    id: "RkslUEHhb6Y",           // ID de YouTube (lo que va después de ?v=)
     num: "Ep. 06",
     title: "Emprender en la era del IA: Seguros, Ideas y Fracasos con Guillermo Beilinson",
     description: "Después de pasar por el mundo corporativo, Guillermo tenía claro que quería construir algo distinto. Pero encontrar qué hacer (y cómo hacerlo) no fue inmediato."
