@@ -6,7 +6,7 @@
 //  3. Completá id, num, title, description
 // ─────────────────────────────────────────────
 
-const EPISODES = [
+var EPISODES = [
   {
     id: "f-4R_wy0Usg",           // ID de YouTube (lo que va después de ?v=)
     num: "Ep. 08",
